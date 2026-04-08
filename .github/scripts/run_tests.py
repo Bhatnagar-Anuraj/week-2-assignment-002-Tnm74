@@ -30,7 +30,7 @@ def detect_changed_assignments(changed_files):
     """Figure out which assignment directories had changes."""
     assignments = set()
     for f in changed_files:
-        if f.startswith("assignments/assignment"):
+        if f.startswith("assignment"):
             # Extract: assignments/assignment01_scene_builder/file.py -> assignment01_scene_builder
             parts = f.split("/")
             if len(parts) >= 2:
@@ -40,13 +40,13 @@ def detect_changed_assignments(changed_files):
 
 def find_all_assignments():
     """Find all assignment directories that have a test file."""
-    test_files = glob.glob("assignments/assignment*/test_assignment.py")
+    test_files = glob.glob("assignment*/test_assignment.py")
     return sorted(os.path.basename(os.path.dirname(t)) for t in test_files)
 
 
 def run_test(assignment_dir):
     """Run test_assignment.py for a given assignment. Returns True if passed."""
-    test_path = os.path.join("assignments", assignment_dir, "test_assignment.py")
+    test_path = os.path.join("assignment", assignment_dir, "test_assignment.py")
     if not os.path.exists(test_path):
         print(f"  No test file found at {test_path}, skipping.")
         return True
@@ -57,7 +57,7 @@ def run_test(assignment_dir):
 
     result = subprocess.run(
         [sys.executable, "test_assignment.py"],
-        cwd=os.path.join("assignments", assignment_dir),
+        cwd=os.path.join("assignment", assignment_dir),
         timeout=60
     )
     return result.returncode == 0
